@@ -8,10 +8,10 @@ Embedded Python により Python ロジックが IRIS プロセスとして実�
 
 # 目次などなど
 
-- [Embedded Python とは](#embedded-python-とは)
-- [2章などなど](#2章などなど)
+- [1. Embedded Python とは](#1-embedded-python-とは)
+- [2. Embedded Python を実行してみよう](#2-embedded-python-を実行してみよう)
 
-## Embedded Python とは
+## 1. Embedded Python とは
 
 「Embedded」という名前のとおり、IRIS 製品に「埋め込まれた」 Python です。IRIS プロセス上で Python ロジックを動作させることが出来ます。この「IRIS プロセスとして動作する」というのが大きな特徴で、IRIS のデータや IRIS ネイティブ言語である ObjectScript と Python とが密接かつシームレスに連携することが可能となります。
 
@@ -20,6 +20,5 @@ Embedded Python により Python ロジックが IRIS プロセスとして実�
 
 IRIS 2024.1 for Windows では、一般的な Python モジュールではなく、IRIS 製品に同梱されている irispython.exe が内部的に利用されます。
 
-
-## 2章などなど
+## 2. Embedded Python を実行してみよう
 
