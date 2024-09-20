@@ -57,7 +57,7 @@ Embedded Python を実行する方法は、以下の 3 種類あります。実�
 
 ## 3. Embedded Python で IRIS リソースにアクセス
 
-ここから、Embedded Python を使って、実際に IRIS のデータやクラスにアクセスしてみましょう。基本的に IRIS リソースにアクセスするときは、iris パッケージを利用します。Embedded Python では、iris パッケージは標準で含まれており、 **import iris** で利用できます。
+ここから、Embedded Python を使って、実際に IRIS のデータやクラスにアクセスしてみましょう。基本的に IRIS リソースにアクセスするときは、iris パッケージを利用します。Embedded Python には iris パッケージは標準で含まれており、 **import iris** で利用できます。
 
 このワークショップでは、上記の **3**、IRIS ターミナルから :py コマンドで起動する Embedded Python 用のシェル上で行います。**>>>** がプロンプトです。
 
