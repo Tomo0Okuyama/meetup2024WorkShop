@@ -11,6 +11,7 @@ Embedded Python により Python ロジックが IRIS プロセスとして実�
 - [1. Embedded Python とは](#1-embedded-python-とは)
 - [2. Embedded Python の実行手段](#2-embedded-python-の実行手段)
 - [3. Embedded Python で IRIS リソースにアクセス](#3-embedded-python-で-iris-リソースにアクセス)
+    - [3-0. 事前準備](#3-0-事前準備)   
     - [3-1. クラスメソッド](#3-1-クラスメソッド)
     - [3-2. グローバルデータ](#3-2-グローバルデータ)
   
@@ -56,33 +57,86 @@ Embedded Python を実行する方法は、以下の 3 種類あります。実�
 
 ## 3. Embedded Python で IRIS リソースにアクセス
 
-ここから、Embedded Python を使って、IRIS のデータやクラスにアクセスしてみましょう。基本的に IRIS リソースにアクセスするときは、iris パッケージを利用します。Embedded Python では、iris パッケージは標準で含まれており、 **import iris** で利用できます。
+ここから、Embedded Python を使って、実際に IRIS のデータやクラスにアクセスしてみましょう。基本的に IRIS リソースにアクセスするときは、iris パッケージを利用します。Embedded Python では、iris パッケージは標準で含まれており、 **import iris** で利用できます。
 
-### 3-1. クラスメソッド
+このワークショップでは、上記の **3**、IRIS ターミナルから :py コマンドで起動する Embedded Python 用のシェル上で行います。**>>>** がプロンプトです。
+
+        USER>:py
+        >>>
+
+### 3-0. 事前準備
+
+IRIS に以下のクラスを登録し、テストデータをセットしておきます。
 
         Class User.test Extends %Persistent
         {        
+        property name As %String;
+
         ClassMethod sum(x1 As %Integer, x2 As %Integer) As %Integer
         {
             quit $g(x1)+$g(x2)
         }
-        }
-
-を Embedded Python から呼び出す方法は、以下のとおりです。
-
-        ClassMethod test1() [ Language = python ]
+        
+        ClassMethod init()
         {
-           import iris
-           a = 2
-           b = 1
-           ans = iris.cls('User.test').sum(a,b)
-           print(ans)
+            kill ^User.testD
+            &sql( insert into test (name) values ('Naka') )
+            &sql( insert into test (name) values ('Sato') )          
+            kill ^a
+            set ^a=55, ^a(1)=123, ^a(1,4)=999
         }
 
-実行例
+        }
 
-        USER>do ##class(User.test).test1()
+データ登録（テーブルデータ と ^a を保存）
+
+        USER>do ##class(User.test).init()
+
+### 3-1. クラスメソッド
+
+IRIS クラスメソッドは、iris パッケージを使って、以下のように実行します。
+
+        import iris
+        ret = iris.cls('classname').methodname(arg)
+
+たとえば、User.test クラス sum メソッドを、Embedded Python Shell から呼んでみましょう。
+
+        >>> import iris
+        >>> a = 2
+        >>> b = 1
+        >>> ans = iris.cls('User.test').sum(a, b)
+        >>> print(ans)
         3
+
+### 3-2. SQL
+
+IRIS テーブルにたいして、iris パッケージを使って、以下のように SQL を実行します。
+
+        import iris
+        st = iris.sql.prepare('SQL statement')
+        rs = st.execute(param)
+
+たとえば、User.test テーブルに対して、Embedded Python Shell から SQL をいくつか実行しましょう。
+
+        >>> import iris
+        >>> st = iris.sql.prepare('select name from test')
+        >>> rs = st.execute()
+        >>> for row in rs:
+        ...   print(row[0])
+        ...
+        Naka
+        Sato
+
+        >>> st2 = iris.sql.prepare('insert into test (name) values (?)')
+        >>> rs2 = st2.execute('Yama')
+        >>>
+        >>> st3 = iris.sql.prepare('select name from test where ID=?')
+        >>> rs3 = st3.execute(3)
+        >>> for row in rs3:
+        ...   print(row[0])
+        ...
+        Yama
+        
 
 ### 3-2. グローバルデータ
 
