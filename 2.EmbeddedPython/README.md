@@ -22,3 +22,20 @@ IRIS 2024.1 for Windows では、一般的な Python モジュールではなく
 
 ## 2. Embedded Python を実行してみよう
 
+Embedded Python を実行する方法は、以下の 3種類あります。実際のアプリとしては **1** がお勧めです。
+1. クラスに **[Language = python]** を宣言したメソッドを登録して実行する。メソッド内部に Python 言語を記述する。
+
+        ClassMethod hello() [ Language = python ]
+        {
+            import datetime
+            day1 = datetime.date(1976, 5, 22)
+            print(day1.isoformat())
+        }
+
+3. ObjectScript からライブラリを利用するときに %SYS.Python を指定する。通常のルーチンからも呼べる。
+
+        set datetime = ##class(%SYS.Python).Import("datetime")
+        set day1 = datetime.date(1976, 5, 22)
+        write day1.isoformat()
+
+4. 
