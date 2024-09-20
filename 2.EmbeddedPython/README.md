@@ -118,7 +118,7 @@ IRIS テーブルにたいして、iris パッケージを使って、以下の�
 
 たとえば、User.test テーブルに対して、Embedded Python Shell から SQL をいくつか実行しましょう。
 
-(1)
+(1) select name from test
 
         >>> import iris
         >>> st = iris.sql.prepare('select name from test')
@@ -129,12 +129,12 @@ IRIS テーブルにたいして、iris パッケージを使って、以下の�
         Naka
         Sato
 
-(2)
+(2) insert into test (name) values (...)
 
         >>> st2 = iris.sql.prepare('insert into test (name) values (?)')
         >>> rs2 = st2.execute('Yama')
 
-(3)
+(3) select name from test where ID = ...
 
         >>> st3 = iris.sql.prepare('select name from test where ID=?')
         >>> rs3 = st3.execute(3)
