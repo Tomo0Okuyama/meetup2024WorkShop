@@ -114,7 +114,7 @@ IRIS テーブルにたいして、iris パッケージを使って、以下の�
         st = iris.sql.prepare('SQL statement')
         rs = st.execute(param)
 
-(1) **select name from eptest**
+#### select name from eptest
 
         >>> import iris
         >>> st = iris.sql.prepare('select name from eptest')
@@ -125,12 +125,12 @@ IRIS テーブルにたいして、iris パッケージを使って、以下の�
         Naka
         Sato
 
-(2) **insert into eptest (name) values (xxx)**
+#### insert into eptest (name) values (xxx)
 
         >>> st2 = iris.sql.prepare('insert into eptest (name) values (?)')
         >>> rs2 = st2.execute('Yama')
 
-(3) **select name from test where ID = xxx**
+#### select name from test where ID = xxx
 
         >>> st3 = iris.sql.prepare('select name from eptest where ID=?')
         >>> rs3 = st3.execute(3)
@@ -155,7 +155,7 @@ IRIS グローバルは、iris パッケージを使って、以下のように�
         set ^a(1)=123
         set ^a(1,4)=999
 
-(1) **write ^a(xxx)**
+#### write ^a(xxx)
 
         >>> import iris
         >>> g = iris.gref('a')
@@ -163,7 +163,7 @@ IRIS グローバルは、iris パッケージを使って、以下のように�
         >>> print( g[1] )      # ^a(1)
         >>> print( g[1,4] )    # ^a(1,4)
 
-(2) **set ^a(xxx) = xxx**
+#### set ^a(xxx) = xxx
 
         >>> g['test'] = 100    # set ^a("test")=100
         >>> quit()
@@ -174,7 +174,7 @@ IRIS グローバルは、iris パッケージを使って、以下のように�
         ^a(1,4)=999
         ^a("test")=100
 
-(3) **$Order**
+#### $Order
 
         USER>:py
         >>> import iris
@@ -187,7 +187,7 @@ IRIS グローバルは、iris パッケージを使って、以下のように�
         1 : 123
         test : 100
 
-(4) **$Data** (データ存在チェック)
+#### $Data (データ存在チェック)
 
         >>> print( g.data( ['test'] ) )   # $Data(^a("test")) = 1
         1
@@ -196,7 +196,7 @@ IRIS グローバルは、iris パッケージを使って、以下のように�
         >>> print( g.data( [2] ) )        # $Data(^a(2)) = 0
         0
 
-(5) **kill ^a(xxx)**
+#### kill ^a(xxx)
 
         >>> g.kill( [1] )    # kill ^a(1)
         >>> quit()
@@ -204,6 +204,14 @@ IRIS グローバルは、iris パッケージを使って、以下のように�
         USER>zw ^a
         ^a=55
         ^a("test")=100
+
+        USER>:py
+        >>> import iris
+        >>> g = iris.gref('^a')
+        >>> g.kill( [None] )   # kill ^a
+        >>> quit()
+
+        USER>zw ^a
 
 
 あああ
