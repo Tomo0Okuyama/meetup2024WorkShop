@@ -15,9 +15,14 @@ Embedded Python により Python ロジックが IRIS プロセスとして実�
     - [3-1. クラスメソッドを実行](#3-1-クラスメソッドを実行)
     - [3-2. SQL を実行](#3-2-sql-を実行)
         -  [SELECT](#select)
-        -  [INSERT (パラメータつき)](#inesrt-パラメータつき)
+        -  [INSERT (パラメータつき)](#insert-パラメータつき)
         -  [SELECT (パラメータつき)](#select-パラメータつき)
     - [3-3. グローバルデータを参照](#3-3-グローバルデータを参照)
+        -  [write ^a(xxx)](#write-axxx)
+        -  [set ^a(xxx) = xxx](#set-axxx--xxx)
+        -  [$Order](#order)
+        -  [$Data (データ存在チェック)](#data-データ存在チェック)
+        -  [kill ^a(xxx)](#kill-axxx)
   
 
 ## 1. Embedded Python とは
