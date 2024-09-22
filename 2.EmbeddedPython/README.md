@@ -23,7 +23,7 @@ Embedded Python により Python ロジックが IRIS プロセスとして実�
         -  [$Order](#order)
         -  [$Data](#data)
         -  [$Query](#query)
-        -  [kill ^a(xxx)](#kill-axxx)
+        -  [kill](#kill)
   
 
 ## 1. Embedded Python とは
