@@ -191,10 +191,10 @@ IRIS グローバルは、iris パッケージを使って、以下のように�
         USER>:py
         >>> import iris
         >>> g = iris.gref('^a')
-        >>> sub = g.order([""])
+        >>> sub = g.order([""])       # set sub=$Order(^a(""))
         >>> while sub:
         ...  print(sub, ":", g[sub])
-        ...  sub = g.order([sub])
+        ...  sub = g.order([sub])     # set sub=$Order(^a(sub))
         ...
         1 : 123
         test : 100
