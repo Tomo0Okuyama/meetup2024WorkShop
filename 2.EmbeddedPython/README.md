@@ -13,6 +13,7 @@ Embedded Python により Python ロジックが IRIS プロセスとして実�
 - [3. Embedded Python で IRIS リソースにアクセス](#3-embedded-python-で-iris-リソースにアクセス)
     - [3-0. 事前準備](#3-0-事前準備)   
     - [3-1. クラスメソッドを実行](#3-1-クラスメソッドを実行)
+    - [3-2. SQL を実行](#3-1-sql-を実行)
     - [3-2. グローバルデータ](#3-2-グローバルデータ)
   
 
@@ -26,10 +27,10 @@ IRIS 2024.1 for Windows では、一般的な Python モジュールではなく
 
 ## 2. Embedded Python の実行手段
 
-Embedded Python を実行する方法は、以下の 3 種類あります。実際のアプリとしては **"1"** がお勧めです。
+Embedded Python を実行する方法は、以下の (A)(B)(C) の 3 種類あります。
 上で説明しましたが、OS から見ると、どれも通常の IRIS プロセスとして起動します。
 
-1. クラスに **[Language = python]** を宣言したメソッドを登録して実行する。メソッド内部に Python 言語を記述する。
+(A) クラスに **[Language = python]** を宣言したメソッドを登録して実行する。メソッド内部に Python 言語を記述する。**Embedded Python を利用したアプリ実装時にお勧め。**
 
         ClassMethod hello() [ Language = python ]
         {
@@ -38,18 +39,15 @@ Embedded Python を実行する方法は、以下の 3 種類あります。実�
             print(day1.isoformat())
         }
 
-2. ObjectScript から %SYS.Python を指定して Python ライブラリをロードする。ObjectScript 言語で記述するため、通常のルーチンからも呼べる。
+(B) ObjectScript から %SYS.Python を指定して Python ライブラリをロードする。ObjectScript 言語で記述するため、通常のルーチンからも呼べる。
 
         set datetime = ##class(%SYS.Python).Import("datetime")
         set day1 = datetime.date(1976, 5, 22)
         write day1.isoformat()
 
-3. IRIS ターミナルから :py コマンドで Embedded Python 用のシェルを起動することで、（一般の Python Shell と同じように）インタラクティブに実行する。
+(C) IRIS ターミナルから :py コマンドで Embedded Python 用のシェルを起動することで、（一般の Python Shell と同じように）インタラクティブに実行する。**Embedded Python の動きを簡単に確認するときにお勧め。**
 
         USER>:py
-         
-        Python 3.9.19 (main, Jul 18 2024, 18:05:27) [MSC v.1927 64 bit (AMD64)] on win32
-        Type quit() or Ctrl-D to exit this shell.
         >>> import datetime
         >>> day1 = datetime.date(1976, 5, 22)
         >>> print(day1.isoformat())
@@ -59,14 +57,14 @@ Embedded Python を実行する方法は、以下の 3 種類あります。実�
 
 ここから、Embedded Python を使って、実際に IRIS のデータやクラスにアクセスしてみましょう。基本的に IRIS リソースにアクセスするときは、iris パッケージを利用します。Embedded Python には iris パッケージは標準で含まれており、 **import iris** で利用できます。
 
-このワークショップでは、上記の **3**、IRIS ターミナルから :py コマンドで起動する Embedded Python 用のシェル上で行います。**>>>** がプロンプトです。
+このワークショップでは、上記の **(C)**、IRIS ターミナルから :py コマンドで起動する Embedded Python 用のシェル上で行います。 **>>>** がプロンプトです。
 
         USER>:py
         >>>
 
 ### 3-0. 事前準備
 
-IRIS に以下のクラス User.eptest を登録し、テストデータをセットしておきます。(ソース eptest.cls)
+IRIS に以下のクラス User.eptest を登録し、テストデータをセットしておきます (ソース eptest.cls 参照)
 
         Class User.eptest Extends %Persistent
         {        
@@ -90,7 +88,7 @@ IRIS に以下のクラス User.eptest を登録し、テストデータをセ�
 
 データ登録（テーブルデータ と ^a を保存）
 
-        USER>do ##class(User.test).init()
+        USER>do ##class(User.eptest).init()
 
 ### 3-1. クラスメソッドを実行
 
@@ -99,16 +97,16 @@ IRIS クラスメソッドは、iris パッケージを使って、以下のよ�
         import iris
         ret = iris.cls('classname').methodname(arg)
 
-たとえば、User.test クラス sum メソッドを、Embedded Python Shell から呼んでみましょう。
+ここで、User.eptest クラス sum メソッドを、Embedded Python Shell から呼んでみましょう。
 
         >>> import iris
         >>> a = 2
         >>> b = 1
-        >>> ans = iris.cls('User.test').sum(a, b)
+        >>> ans = iris.cls('User.eptest').sum(a, b)
         >>> print(ans)
         3
 
-### 3-2. SQL
+### 3-2. SQL を実行
 
 IRIS テーブルにたいして、iris パッケージを使って、以下のように SQL を実行します。
 
@@ -116,12 +114,12 @@ IRIS テーブルにたいして、iris パッケージを使って、以下の�
         st = iris.sql.prepare('SQL statement')
         rs = st.execute(param)
 
-たとえば、User.test テーブルに対して、Embedded Python Shell から SQL をいくつか実行しましょう。
+ここで、User.eptest テーブルに対して、Embedded Python Shell から SQL をいくつか実行しましょう。
 
-(1) select name from test
+(1) select name from eptest [^1]
 
         >>> import iris
-        >>> st = iris.sql.prepare('select name from test')
+        >>> st = iris.sql.prepare('select name from eptest')
         >>> rs = st.execute()
         >>> for row in rs:
         ...   print(row[0])
@@ -129,20 +127,22 @@ IRIS テーブルにたいして、iris パッケージを使って、以下の�
         Naka
         Sato
 
-(2) insert into test (name) values (...)
+(2) insert into eptest (name) values (xxx)
 
-        >>> st2 = iris.sql.prepare('insert into test (name) values (?)')
+        >>> st2 = iris.sql.prepare('insert into eptest (name) values (?)')
         >>> rs2 = st2.execute('Yama')
 
-(3) select name from test where ID = ...
+(3) select name from test where ID = xxx  [^1]
 
-        >>> st3 = iris.sql.prepare('select name from test where ID=?')
+        >>> st3 = iris.sql.prepare('select name from eptest where ID=?')
         >>> rs3 = st3.execute(3)
         >>> for row in rs3:
         ...   print(row[0])
         ...
         Yama
-        
+
+[^1]: "..."プロンプトと print コマンドの前に 空白 をおくこと。また、"..."プロンプトのあとに改行を入力すると結果が出力される。
+
 
 ### 3-2. グローバルデータ
 
