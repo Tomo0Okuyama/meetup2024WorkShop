@@ -14,7 +14,7 @@ Embedded Python により Python ロジックが IRIS プロセスとして実�
     - [3-0. 事前準備](#3-0-事前準備)   
     - [3-1. クラスメソッドを実行](#3-1-クラスメソッドを実行)
     - [3-2. SQL を実行](#3-2-sql-を実行)
-    - [3-2. グローバルデータ](#3-2-グローバルデータ)
+    - [3-3. グローバルデータを参照](#3-2-グローバルデータを参照)
   
 
 ## 1. Embedded Python とは
@@ -108,15 +108,13 @@ IRIS クラスメソッドは、iris パッケージを使って、以下のよ�
 
 ### 3-2. SQL を実行
 
-IRIS テーブルにたいして、iris パッケージを使って、以下のように SQL を実行します。
+IRIS テーブルにたいして、iris パッケージを使って、以下のように SQL を実行できます。
 
         import iris
         st = iris.sql.prepare('SQL statement')
         rs = st.execute(param)
 
-ここで、User.eptest テーブルに対して、Embedded Python Shell から SQL をいくつか実行しましょう。
-
-(1) select name from eptest [^1]
+(1) **select name from eptest**
 
         >>> import iris
         >>> st = iris.sql.prepare('select name from eptest')
@@ -127,12 +125,12 @@ IRIS テーブルにたいして、iris パッケージを使って、以下の�
         Naka
         Sato
 
-(2) insert into eptest (name) values (xxx)
+(2) **insert into eptest (name) values (xxx)**
 
         >>> st2 = iris.sql.prepare('insert into eptest (name) values (?)')
         >>> rs2 = st2.execute('Yama')
 
-(3) select name from test where ID = xxx  [^1]
+(3) **select name from test where ID = xxx**
 
         >>> st3 = iris.sql.prepare('select name from eptest where ID=?')
         >>> rs3 = st3.execute(3)
@@ -141,44 +139,72 @@ IRIS テーブルにたいして、iris パッケージを使って、以下の�
         ...
         Yama
 
-[^1]: "..."プロンプトと print コマンドの前に 空白 をおくこと。また、"..."プロンプトのあとに改行を入力すると結果が出力される。
+### 3-3. グローバルデータを参照
 
+IRIS グローバルは、iris パッケージを使って、以下のように参照できます。
 
-### 3-2. グローバルデータ
+        import iris
+        g = iris.gref('myglobal')
+        x1 = g[1]      # ^myglobal(1)
+        x2 = g[1,4]    # ^myglobal(1,4)
+        x0 = g[None]   # ^myglobal
+
+ここで、^a を Embedded Python Shell から参照してみましょう。
 
         set ^a=55
         set ^a(1)=123
         set ^a(1,4)=999
 
-に対して、Embedded Python からは、以下のように GET/SET できます。
+(1) **write ^a(xxx)**
 
-        ClassMethod test1() [ Language = python ]
-        {
-           import iris
-           g = iris.gref('a')
-           
-           # データを取得 (トップノードは [None])
-           print( g[None] )
-           print( g['1'] )
-           print( g['1','4'] )
-           
-           # ^aを更新
-           g[None] = 555
-           g['test'] = 100
-        }
+        >>> import iris
+        >>> g = iris.gref('a')
+        >>> print( g[None] )   # ^a
+        >>> print( g[1] )      # ^a(1)
+        >>> print( g[1,4] )    # ^a(1,4)
 
-実行例
+(2) **set ^a(xxx) = xxx**
 
-        USER>do ##class(User.test).test1()
-        55
-        123
-        999
+        >>> g['test'] = 100    # set ^a("test")=100
+        >>> quit()
 
-        USER>zw ^a
-        ^a=555
+        USER> zw ^a
+        ^a=55
         ^a(1)=123
         ^a(1,4)=999
-        ^a("test")=100        
+        ^a("test")=100
 
-ああ
+(3) **$Order**
+
+        USER>:py
+        >>> import iris
+        >>> g = iris.gref('^a')
+        >>> sub = g.order([""])
+        >>> while sub:
+        ...  print(sub, ":", g[sub])
+        ...  sub = g.order([sub])
+        ...
+        1 : 123
+        test : 100
+
+(4) **$Data** (データ存在チェック)
+
+        >>> print( g.data( ['test'] ) )   # $Data(^a("test")) = 1
+        1
+        >>> print( g.data( [1] ) )        # $Data(^a(1)) = 11
+        11
+        >>> print( g.data( [2] ) )        # $Data(^a(2)) = 0
+        0
+
+(5) **kill ^a(xxx)**
+
+        >>> g.kill( [1] )    # kill ^a(1)
+        >>> quit()
+        
+        USER>zw ^a
+        ^a=55
+        ^a("test")=100
+
+
+あああ
    
