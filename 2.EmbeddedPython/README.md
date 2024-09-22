@@ -12,7 +12,7 @@ Embedded Python により Python ロジックが IRIS プロセスとして実�
 - [2. Embedded Python の実行手段](#2-embedded-python-の実行手段)
 - [3. Embedded Python で IRIS リソースにアクセス](#3-embedded-python-で-iris-リソースにアクセス)
     - [3-0. 事前準備](#3-0-事前準備)   
-    - [3-1. クラスメソッド](#3-1-クラスメソッド)
+    - [3-1. クラスメソッドを実行](#3-1-クラスメソッドを実行)
     - [3-2. グローバルデータ](#3-2-グローバルデータ)
   
 
@@ -66,9 +66,9 @@ Embedded Python を実行する方法は、以下の 3 種類あります。実�
 
 ### 3-0. 事前準備
 
-IRIS に以下のクラスを登録し、テストデータをセットしておきます。
+IRIS に以下のクラス User.eptest を登録し、テストデータをセットしておきます。(ソース eptest.cls)
 
-        Class User.test Extends %Persistent
+        Class User.eptest Extends %Persistent
         {        
         property name As %String;
 
@@ -79,9 +79,9 @@ IRIS に以下のクラスを登録し、テストデータをセットしてお
         
         ClassMethod init()
         {
-            kill ^User.testD
-            &sql( insert into test (name) values ('Naka') )
-            &sql( insert into test (name) values ('Sato') )          
+            kill ^User.eptestD
+            &sql( insert into eptest (name) values ('Naka') )
+            &sql( insert into eptest (name) values ('Sato') )          
             kill ^a
             set ^a=55, ^a(1)=123, ^a(1,4)=999
         }
@@ -92,7 +92,7 @@ IRIS に以下のクラスを登録し、テストデータをセットしてお
 
         USER>do ##class(User.test).init()
 
-### 3-1. クラスメソッド
+### 3-1. クラスメソッドを実行
 
 IRIS クラスメソッドは、iris パッケージを使って、以下のように実行します。
 
