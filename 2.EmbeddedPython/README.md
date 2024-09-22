@@ -14,6 +14,9 @@ Embedded Python により Python ロジックが IRIS プロセスとして実�
     - [3-0. 事前準備](#3-0-事前準備)   
     - [3-1. クラスメソッドを実行](#3-1-クラスメソッドを実行)
     - [3-2. SQL を実行](#3-2-sql-を実行)
+        -  [SELECT](#select)
+        -  [INSERT (パラメータつき)](#inesrt-パラメータつき)
+        -  [SELECT (パラメータつき)](#select-パラメータつき)
     - [3-3. グローバルデータを参照](#3-3-グローバルデータを参照)
   
 
@@ -114,7 +117,7 @@ IRIS テーブルにたいして、iris パッケージを使って、以下の�
         st = iris.sql.prepare('SQL statement')
         rs = st.execute(param)
 
-#### select name from eptest
+#### SELECT
 
         >>> import iris
         >>> st = iris.sql.prepare('select name from eptest')
@@ -125,12 +128,12 @@ IRIS テーブルにたいして、iris パッケージを使って、以下の�
         Naka
         Sato
 
-#### insert into eptest (name) values (xxx)
+#### INSERT (パラメータつき)
 
         >>> st2 = iris.sql.prepare('insert into eptest (name) values (?)')
         >>> rs2 = st2.execute('Yama')
 
-#### select name from test where ID = xxx
+#### SELECT (パラメータつき)
 
         >>> st3 = iris.sql.prepare('select name from eptest where ID=?')
         >>> rs3 = st3.execute(3)
