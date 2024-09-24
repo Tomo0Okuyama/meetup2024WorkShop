@@ -273,6 +273,6 @@ IRIS の $SYSTEM ユーティリティは、iris パッケージを使って、�
         >>> print(h)
         67107,34603
 
-        >>> d = iris.system.SQL.TOCHAR(h,'YYYY/MM/DD HH:MM:SS')   # set h=$SYSTEM.SQL.TOCHAR(h,"YYYY/MM/DD HH:MM:SS")
+        >>> d = iris.system.SQL.TOCHAR(h,'YYYY/MM/DD HH:MM:SS')   # set d=$SYSTEM.SQL.TOCHAR(h,"YYYY/MM/DD HH:MM:SS")
         >>> print(d)
         2024/09/24 09:09:43
