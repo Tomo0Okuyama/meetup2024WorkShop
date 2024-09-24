@@ -6,7 +6,7 @@ Embedded Python により Python ロジックが IRIS プロセスとして実�
 
 このワークショップを通じて、Embedded Python で IRIS データやメソッドにアクセスする具体的なコードを体験いただけます。
 
-# 目次などなど
+# 目次
 
 - [1. Embedded Python とは](#1-embedded-python-とは)
 - [2. Embedded Python の実行手段](#2-embedded-python-の実行手段)
