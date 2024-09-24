@@ -23,6 +23,7 @@ Embedded Python により Python ロジックが IRIS プロセスとして実�
         -  [set](#set)
         -  [$Order](#order)
         -  [kill](#kill)
+    - [3-5. $SYSTEM ユーティリティ](#3-5-system-ユーティリティ)      
   
 
 ## 1. Embedded Python とは
@@ -151,7 +152,43 @@ IRIS テーブルにたいして、iris パッケージを使って、以下の�
 
 ### 3-3. オブジェクトアクセス
 
-ああああ
+IRIS オブジェクトにアクセスするには、iris パッケージを使って、ObjectScript と同じように以下のように実行します。% メソッドはすべて _ メソッドに変換されます (例: %OpenId -> _OpenId)
+
+        import iris
+        x = iris.cls('classname')._New()   # set x=##class(classname).%New()
+        x.p1 = 123                         # set x.p1=123
+        st = x._Save()                     # set st=x.%Save()
+
+#### %OpenId, %New, %Save
+
+        >>> x = iris.cls('User.eptest')._OpenId(1)
+        >>> print(x.name)
+        Naka
+        >>> x.name = 'Naka2'
+        >>> x._Save()
+        1
+        
+        >>> x2 = iris.cls('User.eptest')._New()
+        >>> x2.name = 'Tana'
+        >>> x2._Save()
+        1
+
+        >>> quit()
+
+        USER>:sql
+        SQL Command Line Shell
+        ----------------------------------------------------
+        [SQL]USER>>select * from eptest
+        
+        | ID | name |
+        | -- | -- |
+        | 1 | Naka2 |
+        | 2 | Sato |
+        | 3 | Tana |
+
+        3 Rows(s) Affected
+        ---------------------------------------------------------------------------
+        [SQL]USER>>quit
 
 ### 3-4. グローバルデータを参照
 
@@ -218,7 +255,24 @@ IRIS グローバルは、iris パッケージを使って、以下のように�
 
         USER>zw ^a
 
+### 3-5. $SYSTEM ユーティリティ
 
+IRIS の $SYSTEM ユーティリティは、iris パッケージを使って、以下のように実行できます。
 
-あああ
-   
+        import iris
+        ret = iris.system.XX.function()    # set ret=$SYSTEM.XX.function()
+
+たとえば、以下のような例があげられます。
+
+        >>> import iris
+        >>> ver = iris.system.Version.Format()    # set ver=$SYSTEM.Version.Format()
+        >>> print(ver)
+        IRIS for Windows (x86-64) 2024.1.1 (Build 347U) Thu Jul 18 2024 17:35:51 EDT
+
+        >>> h = iris.system.SYS.Horolog()       # set h=$SYSTEM.SYS.Horolog()
+        >>> print(h)
+        67107,34603
+
+        >>> d = iris.system.SQL.TOCHAR(h,'YYYY/MM/DD HH:MM:SS')   # set h=$SYSTEM.SQL.TOCHAR(h,"YYYY/MM/DD HH:MM:SS")
+        >>> print(d)
+        2024/09/24 09:09:43
