@@ -4,6 +4,7 @@ from setting import *
 from model import *
 from sqlalchemy import func
 
+import datetime
 import customer
 import product
 
@@ -19,15 +20,39 @@ def product_page() -> None:
 
 @ui.page('/')
 def page():
+    # 直近の売り上げを表示
+    today = datetime.datetime.today()
+    # 月始めを求める
+    thisMonth = today.replace(day=1)
+    lastMonth = (thisMonth - datetime.timedelta(days=1)).replace(day=1)
+    last2Month = (lastMonth - datetime.timedelta(days=1)).replace(day=1)
+    # 今月の売り上げ 
+    result1 = session.query(func.sum(Transactions.total)).where(Transactions.dateTime >= thisMonth).all()
+    # 先月の売り上げ 
+    result2 = session.query(func.sum(Transactions.total)).where(Transactions.dateTime.between(lastMonth,thisMonth)).all()
+    # 先々月の売り上げ 
+    result3 = session.query(func.sum(Transactions.total)).where(Transactions.dateTime.between(last2Month,lastMonth)).all()
+
     with frame('メインページ'):
-        ui.label('ようこそ').font_size('xl')
+        ui.label('ようこそ').tailwind.font_size('xl')
+        ui.space()
+        ui.label('現在の売上高')
+        echart = ui.echart({
+            'xAxis':{ 'type': 'category', 'data': ['先々月', '先月', '今月'], 'inverse': True},
+            'yAxis':{ 'type': 'value'},
+            'series':[{'name': 'Direct', 'type': 'bar', 'barWidth':'60%', 'data':[ result3[0][0], result2[0][0], 
+                        {
+                            'value': result1[0][0],
+                            'itemStyle': { 'color': '#c94444' }
+                        }]
+            }],
+        }).classes('w-1/2 h-96')
 
 # サーバの実行
 ui.run()
 
 @contextmanager
 def frame(navigation_title: str):
-    #ui.colors(primary='#6E93D6', secondary='#53B689', accent='#111B1E', positive='#53B689')
     with ui.header():
         with ui.row().classes('w-full items-center'):
             with ui.button(icon='menu'):
