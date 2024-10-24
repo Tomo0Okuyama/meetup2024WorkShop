@@ -3,7 +3,7 @@ from sqlalchemy.orm import *
 from sqlalchemy.ext.declarative import declarative_base
 
 # 接続先DBのURL設定
-DATABASE = 'iris://_system:minamoto@localhost:51774/USER'
+DATABASE = 'iris://_system:SYS@localhost:1972/USER'
 
 # Engine の作成
 Engine = create_engine(
