@@ -45,6 +45,7 @@ PythonプログラムでIRISデータベースにアクセスするWebアプリ�
 - [8. 製品情報メンテナンスの作成](#8-製品情報メンテナンスの作成)
   - [8.1. メインページの作成](#81-メインページの作成)
   - [8.2. 顧客情報メンテ、製品情報メンテの改造](#82-顧客情報メンテ製品情報メンテの改造)
+  - [8.3. 売上グラフの表示](#83-売上グラフの表示)
 
 ## 1. NiceGUI とは
 
@@ -665,7 +666,7 @@ SQL入力欄の下に表が表示され、先ほど登録したレコードが�
 取引データを作成し顧客情報オブジェクト c を登録、作成した取引明細データを追加します。
 
 ```Python
->>> with Session(Engine) as session:                                                        
+>>> with Session(Engine) as session:
 ...     c = session.get(Customer,1111)
 ...     p1 = Product(productCode='AA-0001',prductName='プロジェクター',price=15000)
 ...     p2 = Product(productCode='AB-0001', productName='プロジェクター設置台',price=10000)
@@ -1120,8 +1121,8 @@ run.io_bound()を使用してRESTアクセスするには、以下のパッケ�
 
 ```Python
 from nicegui import ui,run  # <=== run を追加
-from setting import \*
-from model import \*
+from setting import *
+from model import *
 from datetime import date
 
 import requests   #<=== http リクエスト用
@@ -1293,14 +1294,13 @@ def product_page() -> None:
 @ui.page('/')
 def page():
     with frame('メインページ'):
-        ui.label('ようこそ')
+        ui.label('ようこそ').tailwind.font_size('xl')
 
 # サーバの実行
 ui.run()
 
 @contextmanager
 def frame(navigation_title: str):
-    #ui.colors(primary='#6E93D6', secondary='#53B689', accent='#111B1E', positive='#53B689')
     with ui.header():
         with ui.row().classes('w-full items-center'):
             with ui.button(icon='menu'):
@@ -1345,3 +1345,79 @@ ui.run()       # <=== この行を削除
 
 以上でコマンドプロンプトから main.py を実行することで メインページが表示され、メニューアイコンをクリック、ページを指定することで
 それらのページが表示されるようになります。
+
+### 8.3. 売上グラフの表示
+
+トップページの画面があまりに殺風景なので、直近３ヶ月の売上高グラフを表示します。
+データの取得は以下のように今月、先月、先々月の開始時刻を求め、SQLAlchemyでクエリを実行します。
+
+```Python
+@ui.page('/')
+def page():
+    # ********** ここから追加 *******************
+    # 直近の売り上げを表示
+    today = datetime.datetime.today()
+    # 月始めを求める
+    thisMonth = today.replace(day=1)
+    lastMonth = (thisMonth - datetime.timedelta(days=1)).replace(day=1)
+    last2Month = (lastMonth - datetime.timedelta(days=1)).replace(day=1)
+    # 今月の売り上げ 
+    result1 = session.query(func.sum(Transactions.total)).where(Transactions.dateTime >= thisMonth).all()
+    # 先月の売り上げ 
+    result2 = session.query(func.sum(Transactions.total)).where(Transactions.dateTime.between(lastMonth,thisMonth)).all()
+    # 先々月の売り上げ 
+    result3 = session.query(func.sum(Transactions.total)).where(Transactions.dateTime.between(last2Month,lastMonth)).all()
+```
+
+SQLAlchemy にて集約関数や月初めを求める必要がありますので、sqlalchemyパッケージのfuncクラス、datetimeパッケージをインポートします。
+
+```Python
+    :
+from model import *
+from sqlalchemy import func # <=== 追加
+
+import datetime　# <=== 追加
+import customer
+    :
+```
+
+TransactionsクラスのdateTimeプロパティの型は datetime となっていますので、datetime を使用して月初めの時刻を求めます。
+方法としましては以下のようになっています。
+
+```Python
+    today = datetime.datetime.today()   # 今日の日時を求める
+    # 月始めを求める
+    thisMonth = today.replace(day=1)    # 日付を１にすることで月初めに移動
+    lastMonth = (thisMonth - datetime.timedelta(days=1)).replace(day=1)  # さらに先月の１日を求めます。
+    last2Month = (lastMonth - datetime.timedelta(days=1)).replace(day=1) # さらに先々月の１日を求めます。
+```
+集計クエリはここで求めた月初めの時刻を使用し、以下の売上高を求めます。
+
+- 今月初めから現在までの売り上げ
+- 先月初めから今月初めまでの売り上げ
+- 先々月の初めから先月初めまでの売り上げ
+
+グラフは Apache EChart を使用した ui.echart()を使用しています。
+「ようこそ」と書かれているui.labelの後に以下の処理を入れています。
+
+'''Python
+    ui.label('ようこそ').tailwind.font_size('xl')
+    # ******* ここから追加 *********************
+    ui.space()
+    ui.label('現在の売上高')
+    echart = ui.echart({
+        'xAxis':{ 'type': 'category', 'data': ['先々月', '先月', '今月'], 'inverse': True},
+        'yAxis':{ 'type': 'value'},
+        'series':[{'name': 'Direct', 'type': 'bar', 'barWidth':'60%', 'data':[ result3[0][0], result2[0][0], 
+                    {
+                        'value': result1[0][0],
+                        'itemStyle': { 'color': '#a95555' }
+                    }]
+        }],
+    }).classes('w-1/2 h-96')
+```
+
+横軸はcategoryとして、今月、先月、先々月と表示しています。
+縦軸は集計結果を値としてグラフを作成しています。
+今月だけ目立つよう、色を赤にしています。
+
