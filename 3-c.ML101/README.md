@@ -22,7 +22,7 @@
 Google Colaboratorは、制限付きですが無料で利用できます。
 
 ## Jupyter Notebook
-
+Jupyter Notebookは、
 
 # データセットのロード
 
