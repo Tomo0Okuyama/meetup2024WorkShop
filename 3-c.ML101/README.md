@@ -6,21 +6,29 @@
 
 - [機械学習で手書き数字の識別に挑戦](#機械学習で手書き数字の識別に挑戦)
 - [目次](#目次)
-  - [Google ColaboratoryとJupyter Notebook](#google-colaboratoryとjupyter-notebook)
-  - [データセットのロード](#データセットのロード)
-  - [分類について](#分類について)
-  - [学習してみる](#学習してみる)
-  - [精度](#精度)
-    - [ダミー分類器との比較](#ダミー分類器との比較)
+- [実習環境](#実習環境)
+  - [Google Colaborator](#google-colaborator)
+  - [Jupyter Notebook](#jupyter-notebook)
+- [データセットのロード](#データセットのロード)
+- [分類について](#分類について)
+- [学習してみる](#学習してみる)
+- [精度](#精度)
+  - [ダミー分類器との比較](#ダミー分類器との比較)
 
-## Google ColaboratoryとJupyter Notebook
+# 実習環境
+## Google Colaborator
 このハンズオンでは、[Google Colaboratory](https://colab.research.google.com/?hl=ja)を使用します。あらかじめGoogleアカウントにログインしているブラウザから、[Google Colaboratory](https://colab.research.google.com/?hl=ja)にアクセスしてください。
 
-## データセットのロード
+Google Colaboratorは、制限付きですが無料で利用できます。
 
-## 分類について
+## Jupyter Notebook
 
-## 学習してみる
 
-## 精度
-### ダミー分類器との比較
+# データセットのロード
+
+# 分類について
+
+# 学習してみる
+
+# 精度
+## ダミー分類器との比較
