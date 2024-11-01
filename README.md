@@ -14,6 +14,9 @@
 [3-b.NiceGUI SQLAlchemy を使ってアプリケーションをつくってみよう](/3-b.sqlalchemy/)|[NiceGUI](https://nicegui.io/)と、[Open Exchange](https://openexchange.intersystems.com/)で公開されている[sqlalchemy-iris](https://openexchange.intersystems.com/package/sqlalchemy-iris)を使用してPythonプログラムでIRISデータベースにアクセスするWebアプリケーションを作成します。|
 [3-c.機械学習で手書き数字の識別に挑戦](/3-c.ML101/)|MNISTが提供している手書き数字の画像データセットを使用し、手書きの数字を識別する分類器の作成を通して、機械学習の基本をハンズオン形式で学びます。|
 
+
+VSCodeからIRISへ接続するための設定については、[VSCodeからIRISに接続する方法](#vscodeからirisに接続する方法)をご参照ください。
+
 ## 事前準備について
 
 ご持参いただくパソコンへの事前準備内容は以下の通りです。
@@ -154,3 +157,64 @@ C:\Users\Administrator\AppData\Local\Programs\Python\Python312\python.exe
 
     例）C:\Users\Administrator\AppData\Local\Programs\Python\Python312\
 
+
+## VSCodeからIRISに接続する方法
+
+ワークショップの中でVSCodeからIRISへ接続する内容をお試しいただく場合は、以下ファイルの接続設定をご確認ください。
+
+[.vscode/settings.json](.vscode/settings.json)
+
+デフォルトで以下の設定が記載されています。
+```
+{
+	"intersystems.servers": {
+		"meetup": {
+			"webServer": {
+				"host": "127.0.0.1",
+				"port": 52773,
+				"pathPrefix": "/iris",
+				"scheme": "http",
+			},
+			"username": "_system"
+		}
+	},
+	"objectscript.conn": {
+		"server": "meetup",
+		"ns": "USER",
+		"active": true
+	}
+}
+```
+
+"intersystems.server"以下の設定を環境に合わせてご変更ください。
+
+- A：ポート番号80番以外（52773など）を使用してIRISにアクセスする環境の場合
+
+    以下行を削除してください。
+    ```
+    "pathPrefix": "/iris",
+    ```
+
+- B：ポート番号52773番以外を使用してIRISにアクセスしている場合
+
+    "ports"を使用しているポート番号に合わせて修正します。
+
+    80番の例
+    ```
+    "port": 80,
+    ```
+
+    52774番の例
+    ```
+    "port": 52774,
+    ```
+
+接続情報の修正が終わったら、VSCodeの左バーにあるエクステンションアイコンから「InterSystems」のロゴをクリックし、接続します。
+詳細は図をご覧ください。
+![](/VSCode-IRISsettings.png)
+
+接続できると、画面左下に「meetup[USER]」と表示されます。
+
+![](/meetupUSERconnected.png)
+
+以上で接続完了です。
