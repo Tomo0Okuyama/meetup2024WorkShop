@@ -1,0 +1,17 @@
+{
+	"intersystems.servers": {
+		"meetup": {
+			"webServer": {
+				"host": "127.0.0.1",
+				"port": 52773,
+				"pathPrefix": "/iris"
+			},
+			"username": "_system"
+		}
+	},
+	"objectscript.conn": {
+		"server": "meetup",
+		"ns": "USER",
+		"active": true
+	}
+}
