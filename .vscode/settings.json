@@ -4,7 +4,8 @@
 			"webServer": {
 				"host": "127.0.0.1",
 				"port": 52773,
-				"pathPrefix": "/iris"
+				"pathPrefix": "/iris",
+				"scheme": "http",
 			},
 			"username": "_system"
 		}
