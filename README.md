@@ -236,6 +236,10 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>>
 ``` 
 
+IRIS2024.2をインストールされている方はOSにPython3.12.7をインストールいただいています。インストール時にPATHへの追加を忘れた方も、同様にPythonインストールディレクトリを調査した後、上記コマンドを実行してください。
+
+インストールディレクトリ確認方法
+![](/images/wherepython.png)
 
 ### A-4: VSCodeからIRISに接続する方法
 
