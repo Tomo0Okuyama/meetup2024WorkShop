@@ -15,7 +15,13 @@
 [3-c.機械学習で手書き数字の識別に挑戦](/3-c.ML101/)|MNISTが提供している手書き数字の画像データセットを使用し、手書きの数字を識別する分類器の作成を通して、機械学習の基本をハンズオン形式で学びます。|
 
 
-VSCodeからIRISへ接続するための設定については、[VSCodeからIRISに接続する方法](#vscodeからirisに接続する方法)をご参照ください。
+以下、参考情報です。
+
+- [A-1: VSCodeでワークスペースを開く方法](#a-1-vscodeでワークスペースを開く方法)
+- [A-2: READMEのプレビュー表示](#a-2-readmeのプレビュー表示)
+- [A-3: VSCode内でPowershellを開く方法](#a-3-vscode内でpowershellを開く方法)
+- [A-4: VSCodeからIRISに接続する方法](#a-4-vscodeからirisに接続する方法)
+- [A-5: VSCodeから管理ポータルを開く方法](#a-5-vscodeから管理ポータルを開く方法)
 
 ## 事前準備について
 
@@ -51,14 +57,11 @@ VSCodeからIRISへ接続するための設定については、[VSCodeからIRI
 git clone https://github.com/Intersystems-jp/meetup2024WorkShop.git
 ```
 
-git がインストールされていない方は、**Codeボタンクリック→「Download ZIP」クリック**でダウンロードできます。
+git をインストールしていないパソコンでは、**Codeボタンクリック→「Download ZIP」クリック** で一式をダウンロードできます。
 
-![](/DownloadZip.png)
+![](/images/DownloadZip.png)
 
-ワークショップ当日、ダウンロードファイルの中身をVSCodeから編集したいので、アクセスしやすい場所にZip展開後のフォルダを配置してください。
-
-**ご参考：VSCodeでワークスペースを開く方法：VSCodeのメニュー：File→OpenFolderから、ダウンロードして展開したフォルダ（meetup2024WorkShop）を選択します。**
-![](/OpenWorkspace.png)
+ワークショップ当日、ダウンロードファイルの中身をVSCodeから編集したいので、アクセスしやすい場所にZip展開後のフォルダ（meetup2024WorkShop）を配置してください。
 
 
 ### (3) pythonライブラリのimport確認
@@ -158,13 +161,89 @@ C:\Users\Administrator\AppData\Local\Programs\Python\Python312\python.exe
     例）C:\Users\Administrator\AppData\Local\Programs\Python\Python312\
 
 
-## VSCodeからIRISに接続する方法
+## 参考情報
 
-ワークショップの中でVSCodeからIRISへ接続する内容をお試しいただく場合は、以下ファイルの接続設定をご確認ください。
+### A-1: VSCodeでワークスペースを開く方法
+
+VSCodeでワークスペースを開く方法は、以下の通りです。
+VSCodeのメニュー File→OpenFolderから、ダウンロードして展開したフォルダ(meetup2024WorkShop)を選択し開きます。
+![](/images/OpenWorkspace.png)
+
+
+### A-2: READMEのプレビュー表示
+
+VSCodeでワークスペースを開いたら、各ワークショップで使用するREADME.mdを開きプレビュー表示に切り替えます。
+
+README.mdは各ワークショップ用フォルダ以下にもあります。すべて同じ方法でプレビュー表示をご覧いただけます。
+
+- 1 VSCodeのExplorerアイコンをクリックし、開きたいREADME.mdファイルをクリックします。
+
+- 2 プレビュー表示にする方法は2種類あります。
+
+    その1：画面右上のアイコンを利用する方法
+    ![](/images/PreviewOpen1.png)
+
+    その2：README.mdファイルを右クリックして開く方法
+    ![](/images/PreviewOpen2.png)
+
+【ご参考】README.mdの内容はブラウザでも参照できます（Gitリポジトリにアクセスすると参照できます）
+
+- [ワークショップ用フォルダトップにあるREADME.md](https://github.com/Intersystems-jp/meetup2024WorkShop/blob/main/README.md)
+
+- [Python入門](https://github.com/Intersystems-jp/meetup2024WorkShop/blob/main/1.Python/README.md)
+
+- [Embedded Python で IRIS データにアクセスしよう](https://github.com/Intersystems-jp/meetup2024WorkShop/blob/main/2.EmbeddedPython/README.md)
+
+- [WSGI-FLASK](https://github.com/Intersystems-jp/meetup2024WorkShop/blob/main/3-a.WSGI-Flask/README.md)
+
+- [NiceGUI SQLAlchemy を使ってアプリケーションをつくってみよう](https://github.com/Intersystems-jp/meetup2024WorkShop/blob/main/3-b.sqlalchemy/README.md)
+
+- [機械学習で手書き数字の識別に挑戦](https://github.com/Intersystems-jp/meetup2024WorkShop/blob/main/3-c.ML101/README.md)
+
+GitリポジトリのページでREADMEを参照する際、Outline表示を利用するとページ内ジャンプなどが簡単に行えます。
+![](/images/README-Git-Outline.png)
+
+
+### A-3: VSCode内でPowershellを開く方法
+
+VSCodeメニューバーから **Terminal→New Terminal** をクリックすると画面下側にPowershellが起動します。
+
+![](/images/PowerShell.png)
+
+画面例では、環境変数PATHにIRIS2024.1インストール時に一緒にインストールされるPythonへのパスの設定を行っています。
+
+IRISインストール時デフォルト設定でインストールを行うと、以下ディレクトリにpythonがインストールされています。
+
+`c:\InterSystems\IRIS\lib\python`
+
+IRIS2024.1をお使いの場合は以下のコマンドを実行することで、開いたPowerShell内でpythonコマンドの操作が簡単に行えます。
+
+実行コマンド
+```
+$ENV:PATH+=";C:\InterSystems\IRIS\lib\python"
+```
+
+コマンド実行全体（最初に設定前のPATHを確認しています）
+```
+PS C:\meetup2024WorkShop> $ENV:PATH
+C:\Program Files\Eclipse Adoptium\jdk-8.0.422.5-hotspot\bin;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;
+    《省略》
+PS C:\meetup2024WorkShop> $ENV:PATH+=";C:\InterSystems\IRIS\lib\python"
+PS C:\meetup2024WorkShop> python
+Python 3.9.19 (main, Oct  3 2024, 15:08:04) [MSC v.1927 64 bit (AMD64)] on win32
+Type "help", "copyright", "credits" or "license" for more information.
+>>> import flask
+>>>
+``` 
+
+
+### A-4: VSCodeからIRISに接続する方法
+
+ワークショップの中でVSCodeからIRISへ接続する際、以下ファイルの接続設定をお使いのIRISに合わせて変更してください。
 
 [.vscode/settings.json](.vscode/settings.json)
 
-デフォルトで以下の設定が記載されています。
+ダウンロード直後の接続情報は以下の通りです。
 ```
 {
 	"intersystems.servers": {
@@ -197,7 +276,7 @@ C:\Users\Administrator\AppData\Local\Programs\Python\Python312\python.exe
 
 - B：ポート番号52773番以外を使用してIRISにアクセスしている場合
 
-    "ports"を使用しているポート番号に合わせて修正します。
+    "port"を使用しているポート番号に合わせて修正します。
 
     80番の例
     ```
@@ -208,13 +287,32 @@ C:\Users\Administrator\AppData\Local\Programs\Python\Python312\python.exe
     ```
     "port": 52774,
     ```
+- C：IRISインストール前にIISを有効化していた場合
+
+    IRISをインストールする前にIISを有効化しているとインストール時 **/インスタンス名**の仮想パスを設定しています。
+
+    例は、インストール時に指定するインスタンス名（構成名）を**irisxx**とした場合の設定です。最初に(/)スラッシュが必要になりますのでご注意ください。
+
+    ```
+    "pathPrefix": "/irisxx",
+    ```
+
 
 接続情報の修正が終わったら、VSCodeの左バーにあるエクステンションアイコンから「InterSystems」のロゴをクリックし、接続します。
 詳細は図をご覧ください。
-![](/VSCode-IRISsettings.png)
+![](/images/VSCode-IRISsettings.png)
 
 接続できると、画面左下に「meetup[USER]」と表示されます。
 
-![](/meetupUSERconnected.png)
+![](/images/meetupUSERconnected.png)
 
 以上で接続完了です。
+
+### A-5: VSCodeから管理ポータルを開く方法
+
+この操作の前に、IRISに接続が完了している必要があります。まだの場合は、[A-4: VSCodeからIRISに接続する方法](#a-4-vscodeからirisに接続する方法)をご参照下さい。
+
+VSCodeの左下（青いバーのエリアの左付近）の **metup[USER]** をクリックすると、VSCodeの画面上・中央付近にメニューが表示されます。
+
+![](/images/OpenManagementPortal.png)
+
