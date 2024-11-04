@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Bootstrap-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+    <!-- Bootstrap Icon-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+    <title>ショッピング</title>
+</head>
+<body class="column-gap-3">
+    <div class="container">
+        <h3 class="text-primary"><i class="bi bi-shop"></i>ショッピング</i></h3>
+    </div>
+    <div class="form container">
+        {% if products != "" %}
+        <div class="table-container">
+            <table class="table table-sm table-light table-striped table-hover">
+                <thead class="table-success">
+                    <tr>
+                        <th>製品コード</th>
+                        <th>製品名</th>
+                        <th>金額</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                {% for item in products %}
+                <tr>
+                    <td> {{item[0]}}</td>                
+                    <td> {{item[1]}}</td>
+                    <td> {{item[2]}}</td>
+                    <td>
+                        <form action="{{ url_for('add_to_cart', product_code=item[0]) }}" method="POST">
+                            <input type="submit" class="btn btn-success" value="カートに入れる">
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% endif %}
+    </div>
+    <!-- Bootstrap-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+</body>
+</html>
