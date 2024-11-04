@@ -180,9 +180,10 @@ Webアプリケーションからデーターベースにアクセスします�
 
 ### テーブルの作成
 　"3-b.sqlalchemy"のハンズオンでも共通で利用するテーブルを、作ります。
-下記をIrisでコンパイルすることで、製品(Product), 取引(Transactions), 取引明細(TransactionItem)の3つのテーブルがIRISに作成されます。
+下記を実施することで、製品(Product), 取引(Transactions), 取引明細(TransactionItem)の3つのテーブルをIRISに作成します。(※Customerテーブルはこのハンズオンでは利用しませんが作成しても構いません。)
 
-SQLALCHEMYの「5.1. IRISでのクラス(テーブル)作成 」を実施
+3-b.sqlalchemyの[5.1. IRISでのクラス(テーブル)作成](https://github.com/Intersystems-jp/meetup2024WorkShop/blob/main/3-b.sqlalchemy/README.md#51-iris%E3%81%A7%E3%81%AE%E3%82%AF%E3%83%A9%E3%82%B9%E3%83%86%E3%83%BC%E3%83%96%E3%83%AB%E4%BD%9C%E6%88%90)を実施
+
 
 
 ### データの登録
