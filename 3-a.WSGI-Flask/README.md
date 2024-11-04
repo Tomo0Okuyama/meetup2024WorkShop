@@ -43,7 +43,7 @@ Flaskは、WSGIに準拠した Python Webフレームワークです。シンプ
 
 pipを利用して、flaskをインストールします
 
-        (要確認)python3 -m pip install --target /(IRISインストールディレクトリ)/mgr/python flask
+        pip install --target /(IRISインストールディレクトリ)/mgr/python flask
 
 ### インストールの確認
 
