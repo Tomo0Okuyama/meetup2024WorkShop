@@ -19,7 +19,7 @@
 
 - [A-1: VSCodeでワークスペースを開く方法](#a-1-vscodeでワークスペースを開く方法)
 - [A-2: READMEのプレビュー表示](#a-2-readmeのプレビュー表示)
-- [A-3: VSCode内でPowershellを開く方法](#a-3-vscode内でpowershellを開く方法)
+- [A-3: VSCode内でPowershellを開く方法と環境変数設定方法](#a-3-vscode内でpowershellを開く方法と環境変数設定方法)
 - [A-4: VSCodeからIRISに接続する方法](#a-4-vscodeからirisに接続する方法)
 - [A-5: VSCodeから管理ポータルを開く方法](#a-5-vscodeから管理ポータルを開く方法)
 
@@ -204,7 +204,7 @@ GitリポジトリのページでREADMEを参照する際、Outline表示を利�
 ![](/images/README-Git-Outline.png)
 
 
-### A-3: VSCode内でPowershellを開く方法
+### A-3: VSCode内でPowershellを開く方法と環境変数設定方法
 
 VSCodeメニューバーから **Terminal→New Terminal** をクリックすると画面下側にPowershellが起動します。
 
@@ -238,8 +238,7 @@ Type "help", "copyright", "credits" or "license" for more information.
 
 IRIS2024.2をインストールされている方はOSにPython3.12.7をインストールいただいています。インストール時にPATHへの追加を忘れた方も、同様にPythonインストールディレクトリを調査した後、上記コマンドを実行してください。
 
-インストールディレクトリ確認方法
-![](/images/wherepython.png)
+Pythonインストールディレクトリ例：`C:\Users\{ユーザ名}\AppData\Local\Programs\Python\Python312`
 
 ### A-4: VSCodeからIRISに接続する方法
 
