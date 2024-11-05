@@ -30,7 +30,7 @@ Jupyter Notebookは、プログラムのコード、その実行結果、プロ�
 ## Jupyter Notebookのアップロード
 [Google Colaboratory](https://colab.research.google.com/?hl=ja)にアクセスすると、次のような「ノートブックを開く」ダイアログが出ますので、「アップロード」を選びます。
 
-![ノートブックを開くダイアログ](OpenNotebook.png)
+![ノートブックを開くダイアログ](Images/OpenNotebook.png)
 
 ここで、本レポジトリ内の Notebook/InterSystemsML2024.ipynbを指定してアップロードします。
 
@@ -42,7 +42,7 @@ Notebookに記述されているコードを1つ1つ理解しながら実行し�
 # 実習の補足
 
 ## 教師データの分割
-![教師データの分割](SplitData.png)
+![教師データの分割](Images/SplitData.png)
 ## 混同行列
-![混同行列](ConfusionMatrix.png)
+![混同行列](Images/ConfusionMatrix.png)
 
