@@ -10,7 +10,7 @@
 --|--|
 [1.Python入門](1.Python/)|Pythonの基本操作を楽しく確認できる内容が含まれています。ワークショップ最初にお試しいただきます。|
 [2.Embedded Python で IRIS データにアクセスしよう](/2.EmbeddedPython/)|Embedded Python は、IRIS に標準で備わっている「**Python コードで IRIS データにアクセスする**」ための製品機能です。このワークショップでは、Embedded Python で IRIS データやメソッドにアクセスする具体的なコードを体験いただけます。|
-[3-a.WSGI-Flask](/3-a.WSGI-Flask/)|WSGIに準拠したWebフレームワークを利用して、簡単なWebアプリケーションの作成を体験します。（WSGIについては、開発者向けウェビナー[Embedded Pythonの新機能～2024.1～](https://www.youtube.com/watch?list=PLzSN_5VbNaxA8mOezO6Vcm126GXw_89oN&v=WrttoeW34Rw&feature=youtu.be)でもご紹介しています）|
+[3-a.WSGI-Flask](/3-a.WSGI-Flask/)|WSGIに準拠したWebフレームワーク・Flaskを利用して、シンプルなショッピングカート機能を持つWebアプリケーション作成を体験します。（WSGIについては、開発者向けウェビナー[Embedded Pythonの新機能～2024.1～](https://www.youtube.com/watch?list=PLzSN_5VbNaxA8mOezO6Vcm126GXw_89oN&v=WrttoeW34Rw&feature=youtu.be)でもご紹介しています）|
 [3-b.NiceGUI SQLAlchemy を使ってアプリケーションをつくってみよう](/3-b.sqlalchemy/)|[NiceGUI](https://nicegui.io/)と、[Open Exchange](https://openexchange.intersystems.com/)で公開されている[sqlalchemy-iris](https://openexchange.intersystems.com/package/sqlalchemy-iris)を使用してPythonプログラムでIRISデータベースにアクセスするWebアプリケーションを作成します。|
 [3-c.機械学習で手書き数字の識別に挑戦](/3-c.ML101/)|MNISTが提供している手書き数字の画像データセットを使用し、手書きの数字を識別する分類器の作成を通して、機械学習の基本をハンズオン形式で学びます。|
 
