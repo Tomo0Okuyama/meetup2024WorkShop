@@ -83,7 +83,7 @@ OracleやMySQLなど様々なDBに対応しており、[sqlalchemy-iris](https:/
 ## 3. Hello world
 
 まずはHello worldを表示する画面を作成します。
-test.py を作成し、以下の内容を入力します。
+try.py を作成し、以下の内容を入力します。
 
 ```Python
 from nicegui import ui
@@ -92,10 +92,10 @@ ui.run()
 ```
 
 vscode のウインドウの下側にある、「ターミナル」をクリックすると、PowerShellが表示されます。
-ここで以下のようにpythonを起動しtest.pyを実行しますと、表示するURLが表示され、webブラウザが起動し、webアプリケーションが実行できます。
+ここで以下のようにpythonを起動しtry.pyを実行しますと、表示するURLが表示され、webブラウザが起動し、webアプリケーションが実行できます。
 
 ```PowerShell
-> python test.py
+> python tryt.py
 NiceGUI ready to go on http://localhost:8080, ...
 ```
 
@@ -144,7 +144,7 @@ ui.run()
 
 ```Python
 from nicegui import ui
-with ui.dropdown_button(label='性別','選択してください', auto_close=True):
+with ui.dropdown_button('性別', auto_close=True):
     ui.item('男性', on_click=lambda: ui.notify('男性が選択されました'))
     ui.item('女性', on_click=lambda: ui.notify('女性が選択されました'))
 ui.run()
@@ -155,7 +155,7 @@ ui.run()
 ```Python
 from nicegui import ui
 
-dropdown = ui.dropdown_button('選択してください', auto_close=True)
+dropdown = ui.dropdown_button('性別', auto_close=True)
 
 #コールバック処理
 def action(item):
@@ -213,8 +213,10 @@ from nicegui import run, ui
 import requests
 import json
 
-zipcode = ui.label('郵便番号')
+zipcode = ui.input('郵便番号')
 ui.button('検索', on_click= lambda: invoke_zipcode(zipcode.value))
+address_input=ui.input("住所").props("size=200")
+
 async def invoke_zipcode(zipcode):
     URL = 'https://zipcloud.ibsnet.co.jp/api/search?zipcode='+zipcode
     response = await run.io_bound(requests.get, URL, timeout=10)
@@ -224,7 +226,7 @@ async def invoke_zipcode(zipcode):
         address_input.value = address["address1"] + " " + address["address2"] +" " +  address["address3"]
     else:
         ui.notify(f'郵便番号検索時にエラーが発生しました StatusCode={response.status_code})',timeout=0,close_button="OK")
-run()
+ui.run()
 ```
 
 ## 5. SQLAlchemy
@@ -628,7 +630,7 @@ Customerオブジェクトを作成します。
 ５行目はEnterキーのみ入力することで、一連の処理が実行されます。
 
 ```Python
->>> With Session(Engine) as session:
+>>> with Session(Engine) as session:
 ...     c = Customer(customerId = 1111, firstName='太郎', lastName='山田',
 ...     firstNameKana='タロウ', lastNameKana='ヤマダ', dob = datetime.date(1979,3,5),
 ...     gender = '男')
@@ -1391,6 +1393,7 @@ TransactionsクラスのdateTimeプロパティの型は datetime となって�
     lastMonth = (thisMonth - datetime.timedelta(days=1)).replace(day=1)  # さらに先月の１日を求めます。
     last2Month = (lastMonth - datetime.timedelta(days=1)).replace(day=1) # さらに先々月の１日を求めます。
 ```
+
 集計クエリはここで求めた月初めの時刻を使用し、以下の売上高を求めます。
 
 - 今月初めから現在までの売り上げ
@@ -1400,7 +1403,7 @@ TransactionsクラスのdateTimeプロパティの型は datetime となって�
 グラフは Apache EChart を使用した ui.echart()を使用しています。
 「ようこそ」と書かれているui.labelの後に以下の処理を入れています。
 
-'''Python
+```Python
     ui.label('ようこそ').tailwind.font_size('xl')
     # ******* ここから追加 *********************
     ui.space()
@@ -1420,4 +1423,3 @@ TransactionsクラスのdateTimeプロパティの型は datetime となって�
 横軸はcategoryとして、今月、先月、先々月と表示しています。
 縦軸は集計結果を値としてグラフを作成しています。
 今月だけ目立つよう、色を赤にしています。
-
