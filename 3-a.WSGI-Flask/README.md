@@ -101,14 +101,14 @@ Webブラウザで動作確認を行います。Flaskのデフォルトのポー
 
 - `app = Flask(__name__)` でFlaskのインスタンスを作成します。__name__は現在のモジュール名を指し、Flaskがアプリケーションを正しく設定するために使用します。
 
-- meetup関数では、`@app.route('/')`デコレーターで、ルート（エンドポイント）を定義します。この場合、ルートはアプリケーションのホームページ（/）です。
+- meetup関数では、`@app.route('/')`によりルート（エンドポイント）を定義します。この場合、ルートはアプリケーションのホームページ（/）です。これはFlaskのRouting機能によるものです。
 `methods=['GET']`は、HTTP GETリクエストがこのルートにアクセスできることを示します。
 
 
   - meetup関数は、アクセスされたときに"Hello MeetUp!"という文字列を返します。
 
 - product_detail関数では、
-`@app.route('/product/<product_code>')`により、/product/<product_code>というURLパターンを持つルートを定義します。`<product_code>`はプレースホルダーで、URLの一部として任意の値を受け取ります。受け取った値を利用したメッセージを返します。
+`@app.route('/product/<product_code>')`により、/product/<product_code>というURLパターンを持つルートを定義します。`<product_code>`はプレースホルダーで、URLの一部として任意の値を受け取ります。関数の処理として、受け取った値を利用したメッセージを返します。
 
 - `if __name__ == "__main__":`
     `app.run(debug=True)`
@@ -160,7 +160,7 @@ IRIS管理ポータルより、
 
 ※ 実運用では必要な権限のみを付与してください。
 
-※ アプリケーションロール設定は、初期セキュリティ設定：最小 でIRISをインストールさた方には不要(UnknownUserが%All権限を持っている)ですが、手順の確認のために記載しています。
+※ アプリケーションロール設定は、初期セキュリティ設定：最小 でIRISをインストールされた方には不要(UnknownUserが%All権限を持っている)ですが、手順の確認のために記載しています。
 
 ### Webブラウザで確認
 
@@ -250,7 +250,7 @@ SQLのSELECT文により製品テーブルから情報を取得しています�
 ルートを一つ追加します。/productsにアクセスすることにより、製品一覧を取得できるページとします。
 list_products関数をよびだし、製品データを取得しています。
 
-render_template によりproducts.htmlを描画します。パラメーターとして製品のデータを渡しています。
+render_template によりproducts.htmlをテンプレートとして利用し、パラメーターとして製品のデータを渡し、HTMLを出力します。
 
 
     @app.route('/products', methods=['GET'])
@@ -332,9 +332,11 @@ products.htmlを次のように作成します。
     </html>
 
 
-`{% if products != "" %}` -  `{% endif %}` で 製品(products)データが存在する場合のみ、テーブルを描画するようにしています。
+`{% if products != "" %}` -  `{% endif %}`  で製品(products)データが存在する場合のみ、テーブルを描画するようにしています。
 
 `{% for item in products %}` - `{% endfor %}` で 製品データをループさせ、`{{ item[n] }}`で それぞれの項目を表示しています。
+
+これらは、Flaskのデフォルトのテンプレートエンジンである[Jinja2](https://jinja.palletsprojects.com/en/stable/templates/)の機能となります。
 
 ### ソースの反映
 
@@ -379,13 +381,13 @@ Webブラウザで動作確認します。
 ソースコード： [src/templates/cart_added.html](src/templates/cart_added.html)
 
 - 製品名とともにカートへの追加したことを示すメッセージを表示します。
-- カートの中身を見るボタンを設置します。押下するとカートページへ遷移します。
+- カートの中身を見るボタンを設置します。押下するとカート表示処理を呼び出します。
 
 #### カートページ
 ソースコード： [src/templates/cart.html](src/templates/cart.html)
 
 - カート内を表示します。総合計金額を表示します。
-- 製品一覧ページへ戻るためのボタン、支払いをするためのボタンを設置します。
+- 製品一覧ページへ戻るためのボタン、支払いをするためのボタンを設置します。支払いボタンを押下すると支払処理を呼び出します。
 
 #### 支払い完了ページ
 ソースコード： [src/templates/checkout_success.html](src/templates/checkout_success.html)
@@ -404,19 +406,80 @@ Webブラウザで動作確認します。
 
 #### CSSフレームワークの活用
 
+Webの見た目を整えるためにCSS(Cascading Style Sheets)が必要となりますが、
+CSSのコーディングは煩雑で、ブラウザごとの対応が必要だったり、モバイル/デスクトップなどの多くのデバイスの差異に対応するのには非常に骨の折れる作業となります。そこで効率的に見た目を整えることができるCSSフレームワークが活用されることが多くなっています。
+
+このハンズオンでは、CSSフレームワークとして代表的なBootstrapを利用し、見た目を調整しています。
+
+
+HTMLのhead部分で読み込みを行います。
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+
+classでBootstrapでどのような見た目にするのかの指示を行います。
+
+下記はcheckout_success.htmlでのリンク、ボタンの例です。
+aタグはリンクですが、classを指定することで、ボタンのような見た目にしています。
+
+    <a href="(略))" class="btn btn-secondary">製品一覧へ戻る</a>
+    <button class="btn btn-info" onclick="alert('(略)')">支払い履歴を確認する</button>
+
+下図は、classを指定しなかった場合(BootstrapによるCSSが効いてない場合)の見た目です。
+
+![alt text](non-bootstrap-button.png)
+
+下図が、classを指定しBootstrapによるCSSが効いている見た目となります。
+
+![alt text](bootstrap-button.png)
+
+Bootstrapのボタンについての詳細なコーディング方法は[Bootstrap Buttons](https://getbootstrap.jp/docs/5.3/components/buttons/) をご覧ください。
+
+Bootstrap全般については [Bootstrap](https://getbootstrap.jp/)をご覧ください。
+
+
 #### アイコンの活用
+
+アイコンを表示するために、[Bootstrap Icons](https://icons.getbootstrap.jp/) を利用しています。
+
+head部分で 読み込みを行います。
+
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+
+
+アイコンを利用する際には下記のようにclassを指定します。
+
+        <i class="bi bi-shop"></i>ショッピング</i>
+
+これで下図のようにアイコンが表示されます。
+
+![alt text](shopicon-sample.png)
+
+詳細な利用方法は [Bootstrap Icons](https://icons.getbootstrap.jp/) をご覧ください。
 
 #### エンドポイントURLの生成
 
 Flaskのurl_for関数を使用して、エンドポイントとなるURLを生成しています。
-たとえば、cart_added.htmlの`<form action="{{ url_for('view_cart') }}" method="GET">` であれば、
-view_cart関数に対応したURLである/cartのurlが生成されます。
+たとえば、products.htmlのカートの中身を見るボタンのForm部分のコードは下記のようになっています。
+
+        <form action="{{ url_for('add_to_cart', product_code=item[0]) }}" method="POST">
+
+
+`{{ url_for('add_to_cart', product_code=item[0]) }}` の部分は、url_for関数により、shopping.pyのadd_to_cart関数に対応したURLが製品コードの引数とともに生成されます。
+ブラウザに出力される際には下記のようなコードなります。
+
+        <form action="/shopping/cart/add/(製品コード)" method="POST">
+
 
 ### Webブラウザで確認
 
-(サーバーURL)/shopping/products にアクセスします。
-- カートへの追加、カートの表示、支払処理を試してみてください
-- 支払い処理後、データベースにアクセスし、取引テーブル、取引明細テーブルにデータが登録されていることを確認してください。
+
+ (サーバーURL)/shopping/products にアクセスします。
+ 
+- カートへの追加、カートの表示、支払処理を試してみてください。
+- 支払い処理を行うと、取引テーブル、取引明細テーブルにデータが生成されます。
+データベースにアクセスし、取引テーブル(Transactions)、取引明細テーブル(TransactionItem)にデータが登録されていることを確認してみてください。
+
+以上で、このハンズオンは完了です。機能はシンプルなものにとどめていますが、Webアプリ開発の一助となれば幸いです。
 
 #### Note
 - 今回のソースコードは、下記については考慮されていません。
