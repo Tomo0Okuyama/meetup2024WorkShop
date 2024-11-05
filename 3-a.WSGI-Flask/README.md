@@ -214,9 +214,6 @@ Webアプリケーションからデーターベースにアクセスします�
 |個数|Quantity|数値|
 |取引|Transactions|Transactions参照|
 
-3-b.sqlalchemyの[5.1. IRISでのクラス(テーブル)作成](https://github.com/Intersystems-jp/meetup2024WorkShop/blob/main/3-b.sqlalchemy/README.md#51-iris%E3%81%A7%E3%81%AE%E3%82%AF%E3%83%A9%E3%82%B9%E3%83%86%E3%83%BC%E3%83%96%E3%83%AB%E4%BD%9C%E6%88%90)を実施
-
-
 ### データの登録
 
 製品のデータが必要ですので、データを登録します。(なお、"3-b.sqlalchemy"で作成する製品メンテナンス機能を利用してデータを登録することもできます)
