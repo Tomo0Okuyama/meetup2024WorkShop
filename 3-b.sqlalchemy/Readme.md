@@ -213,8 +213,10 @@ from nicegui import run, ui
 import requests
 import json
 
-zipcode = ui.label('郵便番号')
+zipcode = ui.input('郵便番号')
 ui.button('検索', on_click= lambda: invoke_zipcode(zipcode.value))
+address_input=ui.input("住所").props("size=200")
+
 async def invoke_zipcode(zipcode):
     URL = 'https://zipcloud.ibsnet.co.jp/api/search?zipcode='+zipcode
     response = await run.io_bound(requests.get, URL, timeout=10)
@@ -224,7 +226,7 @@ async def invoke_zipcode(zipcode):
         address_input.value = address["address1"] + " " + address["address2"] +" " +  address["address3"]
     else:
         ui.notify(f'郵便番号検索時にエラーが発生しました StatusCode={response.status_code})',timeout=0,close_button="OK")
-run()
+ui.run()
 ```
 
 ## 5. SQLAlchemy
