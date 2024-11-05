@@ -102,14 +102,14 @@ def checkout():
         product = get_product_by_code(code)
 
         if product is not None:
-            # 支払い明細オブジェクトの生成
+            # 取引明細オブジェクトの生成
             item = iris.cls('User.TransactionItem')._New()
             item.Transactions = ts
             item.Product = product
             item.UnitPrice = product.Price
             item.Quantity = quantity
 
-            # 支払い明細の登録
+            # 取引明細の登録
             item._Save()
             total += product.Price * quantity
     # 合計金額
