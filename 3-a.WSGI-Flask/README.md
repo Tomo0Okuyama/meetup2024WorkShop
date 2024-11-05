@@ -77,10 +77,10 @@ if __name__ == "__main__":
     app.run(debug=True)
 ```
 
-### irispythonでFlaskを実行
-作成したコードを実行します。
+### Flaskを実行
+ターミナルを起動し、作成したコードを実行します。
 
-    /(IRISインストールディレクトリ))/bin/irispython shopping.py
+    python shopping.py
 
 #### ブラウザで確認
 
