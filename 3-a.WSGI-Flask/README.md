@@ -35,7 +35,7 @@ IRIS 2024.1では、DjangoやFlaskといったWSGIに準拠するWebアプリケ
 
 ## 2. WSGI準拠のWebフレームワーク Flask
 
-Flaskは、WSGIに準拠した Python Webフレームワークです。シンプルな設計でありながら、多くの拡張機能により、Webアプリケーションに必要な機能を追加できるのが特徴で、人気のあるWebフレームワークの一つです。
+[Flask](https://flask.palletsprojects.com/en/stable/) は、WSGIに準拠した Python Webフレームワークです。シンプルな設計でありながら、多くの拡張機能により、Webアプリケーションに必要な機能を追加できるのが特徴で、人気のあるWebフレームワークの一つです。
 
 さっそくFlaskをインストールしてみましょう。
 
@@ -370,6 +370,8 @@ Webブラウザで動作確認します。
 
 各ページへのルーティングや処理、データアクセス処理などを記載しています。
 
+詳細は [メイン処理の詳細解説](#メイン処理の詳細解説) で解説します。
+
 
 ##### 製品一覧ページ
 ソースコード： [src/templates/products.html](src/templates/products.html)
@@ -399,6 +401,135 @@ Webブラウザで動作確認します。
     直接データベースにアクセスし、取引テーブル、取引明細テーブルを確認することで支払い処理を確認することができます。
 
 ### メイン処理の詳細解説
+
+メインの処理を記載している [src/shopping.py](src/shopping.py) について解説します。(これまで説明した関数は省きます。)
+
+#### get_product_by_code関数 
+
+    def get_product_by_code(product_code):
+        sql = "select ID from product where ProductCode=?"
+        # SQLステートメントの準備
+        stmt = iris.sql.prepare(sql)
+        # 結果セットの取得
+        rset = stmt.execute(product_code)
+        for product in rset:
+            return iris.cls('User.Product')._OpenId(product[0])
+        return None
+
+
+製品コードから製品データを1件取得し、製品オブジェクトを返します。
+- SQLのSELECT文で製品コードにより製品データを取得した後、_OpenIdでProductのオブジェクトを取得し、返しています。
+
+#### add_to_cart関数
+    @app.route('/cart/add/<product_code>', methods=['POST'])
+    def add_to_cart(product_code):
+        # 製品コードから製品データを取得
+        product = get_product_by_code(product_code)
+        if product is None:
+            return jsonify({'message': 'Product not found!'}), 404
+
+        if 'cart' not in session:
+            # Session内の'cart'初期化
+            session['cart'] = {}
+        
+        # カートの当該製品の件数をインクリメント
+        session['cart'][product_code] = session['cart'].get(product_code, 0) + 1
+        
+        # セッションの変更を通知
+        session.modified = True  
+        return render_template('cart_added.html', product_name=product.ProductName)
+
+ショッピングカートに製品を追加します。
+
+- ルーティング定義により/cart/add/<製品コード> のPOST通信の際にこの関数が呼ばれるようにしています。
+- パラメーターの製品コードから製品データを取得します。
+- セッション内に保持しているカート内の当該製品コードをインクリメント(+1)します。これは当該製品のカート内の件数をあらわします。
+  - 一般的にセッションは、クライアント(ブラウザ)とサーバ間での状態を管理するための仕組みです。
+- 製品名をパラメーターとしてcart_added.htmlを描画しています。
+
+#### view_cart関数
+
+    # カートの内容を表示
+    @app.route('/cart', methods=['GET'])
+    def view_cart():
+        # セッションよりカート情報を取得
+        cart = session.get('cart', {})
+
+        cart_items = []
+        total = 0
+        for code, quantity in cart.items():
+            # 製品コードより製品を取得
+            product = get_product_by_code(code)
+            if product is not None:
+                # 表示するためのカート情報をセット
+                cart_items.append({
+                    'ProductCode': code,
+                    'ProductName': product.ProductName,
+                    'Quantity': quantity,
+                    'UnitPrice': product.Price,
+                    'TotalPrice': product.Price * quantity
+                })
+                total += product.Price * quantity
+        return render_template('cart.html', items=cart_items, total=total)
+
+カートの内容を表示します。
+- ルーティングとして /cartのGet通信の際にこの関数が呼ばれます。
+- セッションよりカート情報を取得します。
+- カートの製品コードから製品データを取得します。
+- 表示用にcart_itemsに情報をセットし、合計金額を算出します。
+- cart_itemsと合計金額をパラメータとして、cart.htmlを描画します。
+
+#### checkout関数
+
+    @app.route('/checkout', methods=['POST'])
+    def checkout():
+        if 'cart' not in session or not session['cart']:
+            return "カートの中身が空です。"
+
+        # 取引オブジェクトを生成
+        ts = iris.cls('User.Transactions')._New()    
+
+        total = 0
+        # カート内をループ
+        for code, quantity in session['cart'].items():
+            # 製品コードより製品データを取得
+            product = get_product_by_code(code)
+
+            if product is not None:
+                # 支払い明細オブジェクトの生成
+                item = iris.cls('User.TransactionItem')._New()
+                item.Transactions = ts
+                item.Product = product
+                item.UnitPrice = product.Price
+                item.Quantity = quantity
+
+                # 支払い明細の登録
+                item._Save()
+                total += product.Price * quantity
+        # 合計金額
+        ts.Total = total
+
+        # 現在時刻をセット
+        ts.TransactionDateTime= iris.cls('%Library.PosixTime').CurrentTimeStamp()
+        
+        # 取引の登録
+        ts._Save()
+
+        # セッションよりカートをクリア
+        session.pop('cart', None)
+
+        # セッションの変更を通知
+        session.modified = True  
+        return render_template('checkout_success.html', total=total)
+
+支払い処理を行います。
+- ルーティングとして/checkout にPOST通信が発生した際にこの関数が呼ばれます。
+- カートより、製品データを取得します。
+- 製品ごとに、取引明細データ(取引、製品、単価、件数)を登録します。
+  - たとえば製品が3種類カート内にあれば、3件の取引明細データが登録されます。
+- 取引データ(合計金額、現在時刻)を1件登録します。
+- 購入が終わればカートは空にする必要がありますので、セッションのカート情報をクリアします。
+- 合計金額を引数として checkout_success.htmlを描画します。
 
 
 
@@ -448,7 +579,7 @@ head部分で 読み込みを行います。
 
 アイコンを利用する際には下記のようにclassを指定します。
 
-        <i class="bi bi-shop"></i>ショッピング</i>
+        <i class="bi bi-shop"></i>ショッピング
 
 これで下図のようにアイコンが表示されます。
 
