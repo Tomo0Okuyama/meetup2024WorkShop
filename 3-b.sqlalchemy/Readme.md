@@ -416,7 +416,7 @@ from sqlalchemy.orm import *
 from sqlalchemy.ext.declarative import declarative_base
 
 # 接続先DBの設定
-DATABASE = 'iris://_system:SYS@localhost:51773/USER'
+DATABASE = 'iris://_system:SYS@localhost:1972/USER'
 
 # Engine の作成
 Engine = create_engine(
@@ -466,9 +466,6 @@ import datetime
 # 顧客情報
 class Customer(Base):
     __tablename__ = 'Customer'
-    __table_args__ = {
-        'comment': '顧客情報'
-    }
     customerId = Column('CustomerId', Integer, primary_key=True, index=True, autoincrement= False)
     firstName = Column('FirstName', String)
     lastName = Column('LastName', String)
@@ -508,9 +505,6 @@ from sqlalchemy import Column, Integer, String, Date, DateTime,ForeignKey
 # 製品情報
 class Product(Base):
     __tablename__ = 'Product'
-    __table_args__ = {
-        'comment': '製品情報'
-    }
     productCode = Column('ProductCode', String, primary_key=True, index=True)
     productName = Column('ProductName', String)
     price = Column('Price', Integer)
