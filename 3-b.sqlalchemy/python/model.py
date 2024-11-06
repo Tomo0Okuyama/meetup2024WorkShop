@@ -4,8 +4,6 @@ from sqlalchemy.orm import relationship
 from setting import Base
 import datetime
 
-# モデルクラス
-
 # 顧客情報
 class Customer(Base):
     __tablename__ = 'Customer'
