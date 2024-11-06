@@ -189,7 +189,7 @@ Webアプリケーションからデーターベースにアクセスします�
 
 3-b.sqlalchemyの[5.1. IRISでのクラス(テーブル)作成](https://github.com/Intersystems-jp/meetup2024WorkShop/blob/main/3-b.sqlalchemy/README.md#51-iris%E3%81%A7%E3%81%AE%E3%82%AF%E3%83%A9%E3%82%B9%E3%83%86%E3%83%BC%E3%83%96%E3%83%AB%E4%BD%9C%E6%88%90)を実施してください。
 
-(src\User フォルダに Product.cls、Transacdtion.cls、TransactionItem.clsを作成し、コンパイルを行います。IRISの接続先はUserネームスペースとしてください。)
+(src\User フォルダに [Product.cls](../3-b.sqlalchemy/src/User/Product.cls)、[Transactions.cls](../3-b.sqlalchemy/src/User/Transactions.cls)、[TransactionItem.cls](../3-b.sqlalchemy/src/User/TransactionItem.cls)を作成し、コンパイルを行います。IRISの接続先はUserネームスペースとしてください。) 
 
 実施すると、IRIS上に下記のテーブルが作成されます。
 
@@ -637,7 +637,7 @@ Flaskのurl_for関数を使用して、エンドポイントとなるURLを生�
 ここでは、actionで指定されたURL(/shopping/cart/add/(製品コード))に対して、methodで指定されたPOST通信を行います。
 submitボタン(ここでは"カートに入れる"ボタン)が押下されたときに通信が発生します。
 
-そうすると、下図のshopping.pyで定義したルーティングによって、add_to_cart関数が実行されることになります。
+通信が発生すると、下図のshopping.pyで定義したルーティングによって、add_to_cart関数が実行されることになります。
 
     @app.route('/cart/add/<product_code>', methods=['POST'])
     def add_to_cart(product_code):
