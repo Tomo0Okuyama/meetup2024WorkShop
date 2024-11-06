@@ -102,8 +102,13 @@ Webブラウザで動作確認を行います。Flaskのデフォルトのポー
 - `app = Flask(__name__)` でFlaskのインスタンスを作成します。__name__は現在のモジュール名を指し、Flaskがアプリケーションを正しく設定するために使用します。
 
 - meetup関数では、`@app.route('/')`によりルート（エンドポイント）を定義します。この場合、ルートはアプリケーションのホームページ（/）です。これはFlaskのRouting機能によるものです。
-`methods=['GET']`は、HTTP GETリクエストがこのルートにアクセスできることを示します。
-
+`methods=['GET']`は、HTTPメソッドを指定しています。ここではHTTP GETリクエストがこのルートにアクセスできることを示します。
+  - HTTPメソッドは通信の役割を示すもので、下記が主要なHTTPメソッドです。
+    - GET: サーバーから情報を取得する
+    - POST: サーバーに情報を送信する
+    - DELETE: サーバー上のリソースを削除する
+    - PUT: サーバー上の既存のリソースを更新する
+    - PATCH: サーバー上のリソースを部分的に更新する
 
   - meetup関数は、アクセスされたときに"Hello MeetUp!"という文字列を返します。
 
@@ -364,7 +369,7 @@ products.htmlを次のように作成します。
 
 `{% for item in products %}` - `{% endfor %}` で 製品データをループさせ、`{{ item[n] }}`で それぞれの項目を表示しています。
 
-これらは、Flaskのデフォルトのテンプレートエンジンである[Jinja2](https://jinja.palletsprojects.com/en/stable/templates/)の機能となります。
+これらは、Flaskのデフォルトのテンプレートエンジンである[Jinja](https://jinja.palletsprojects.com/en/stable/templates/)の機能となります。
 
 ### ソースの反映
 
@@ -628,6 +633,15 @@ Flaskのurl_for関数を使用して、エンドポイントとなるURLを生�
 
         <form action="/shopping/cart/add/(製品コード)" method="POST">
 
+なお、HTMLの仕組みとして、formタグはユーザーの入力を受け取り、通信を行うためのものです。
+ここでは、actionで指定されたURL(/shopping/cart/add/(製品コード))に対して、methodで指定されたPOST通信を行います。
+submitボタン(ここでは"カートに入れる"ボタン)が押下されたときに通信が発生します。
+
+そうすると、下図のshopping.pyで定義したルーティングによって、add_to_cart関数が実行されることになります。
+
+    @app.route('/cart/add/<product_code>', methods=['POST'])
+    def add_to_cart(product_code):
+        (略)
 
 ### Webブラウザで確認
 
