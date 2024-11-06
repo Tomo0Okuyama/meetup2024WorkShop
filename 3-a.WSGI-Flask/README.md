@@ -623,7 +623,7 @@ head部分で 読み込みを行います。
 #### エンドポイントURLの生成
 
 Flaskのurl_for関数を使用して、エンドポイントとなるURLを生成しています。
-たとえば、products.htmlのカートの中身を見るボタンのForm部分のコードは下記のようになっています。
+たとえば、products.htmlの"カートに入れる"ボタンのForm部分のコードは下記のようになっています。
 
         <form action="{{ url_for('add_to_cart', product_code=item[0]) }}" method="POST">
 
@@ -670,6 +670,3 @@ submitボタン(ここでは"カートに入れる"ボタン)が押下された�
 ログは下記に出力されます。
 
   `(IRISインストールディレクトリ)/mgr/WSGI.log`
-
-
-
