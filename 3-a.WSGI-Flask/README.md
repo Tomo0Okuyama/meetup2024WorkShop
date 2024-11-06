@@ -21,6 +21,7 @@ WSGIはWeb Server  Gateway Interfaceの略で、ウィズギー　もしくは�
 WSGIは、WebサーバーとPythonアプリケーション間の通信を可能にし、Webアプリケーションの開発を容易にします。
 
 ![alt text](wsgi-rel.png)
+
 この図は、Webアプリケーションの簡単なアーキテクチャーを示しています。
 WebサーバーはHTTPリクエストを受けとり、適切なリソースを提供する役割があります。
 Webアプリは、動的なコンテンツを提供したり、様々な機能を提供します。Pythonでは、djangoやFlaskといったWebフレームワークを利用してWebアプリが開発されることが多いです。
